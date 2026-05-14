@@ -37,7 +37,7 @@ node -v
 1. เปิด Browser ไปที่ **claude.ai/download**
 2. กด Download สำหรับ Mac
 3. ลาก Claude Code ไปไว้ใน Applications
-4. เปิดแอป → Sign in ด้วย account ทีม
+4. เปิดแอป → Sign in
 
 เปิดแล้วเห็นหน้าต่างสีดำ — ถูกต้องแล้ว ปิดทิ้งไว้ก่อน
 

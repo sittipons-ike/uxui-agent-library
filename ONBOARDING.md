@@ -125,7 +125,13 @@ Skills ชุดนี้เพิ่มความสามารถ visual de
 
 ## ขั้นตอนที่ 5 — ลง Skills ของทีม
 
-เปิด **Terminal** → `cd` เข้าโฟลเดอร์ที่ดาวน์โหลด repo นี้มา แล้วรัน:
+1. เปิด **Finder** → ไปที่โฟลเดอร์ที่ดาวน์โหลด repo นี้มา (โฟลเดอร์ชื่อ `uxui-agent-library`)
+2. เปิด **Terminal** (ค้นหาใน Spotlight: `Cmd + Space` → พิมพ์ `Terminal` → Enter)
+3. พิมพ์ `cd ` (มีเว้นวรรค 1 ตัวหลัง cd) **แล้วอย่ากด Enter ยังนะ**
+4. **ลาก** โฟลเดอร์ `uxui-agent-library` จาก Finder ไปวางใน Terminal window
+   → path จะปรากฏขึ้นอัตโนมัติ เช่น `cd /Users/yourname/Downloads/uxui-agent-library`
+5. กด **Enter**
+6. พิมพ์คำสั่งนี้แล้วกด Enter:
 
 ```
 bash setup.sh
@@ -133,7 +139,7 @@ bash setup.sh
 
 รอสักครู่ ถ้าขึ้น `✅ เสร็จแล้ว!` แสดงว่า Skills พร้อมใช้งาน
 
-> **ไม่รู้จัก git?** กด **Code → Download ZIP** บน GitHub → แตกไฟล์ → เปิด Terminal → `cd` ไปที่โฟลเดอร์ที่แตกแล้ว → รัน `bash setup.sh`
+> **ไม่มี repo ในเครื่อง?** เปิด GitHub → กด **Code → Download ZIP** → แตกไฟล์ → ทำตามขั้นตอน 1–6 อีกครั้ง
 
 > **ต้องทำขั้นตอนที่ 4 ก่อน** — setup.sh ไม่รวม skills จาก impeccable.style
 

@@ -110,16 +110,18 @@ node -v
 
 Skills ชุดนี้เพิ่มความสามารถ visual design ให้ Claude เช่น animate, polish, colorize, critique ฯลฯ
 
-**วิธีติดตั้ง (ไม่ต้องใช้ terminal):**
+**วิธีติดตั้ง:**
 
-1. เปิด **Claude Code Desktop**
-2. พิมพ์ `/plugin` แล้วกด Enter
-3. กดแท็บ **Discover**
-4. ค้นหา **Impeccable**
-5. กด **Install**
-6. รอสักครู่จนขึ้น Installed
+1. เปิด **Terminal** (Spotlight: `Cmd + Space` → พิมพ์ `Terminal` → Enter)
+2. copy คำสั่งนี้ทั้งหมด วางใน Terminal แล้วกด Enter:
 
-> ติดตั้งครั้งเดียว ได้ทุก skill จาก impeccable.style — ไม่ต้องแตะ Terminal เลย
+```
+npx skills add pbakaus/impeccable
+```
+
+3. รอจนคำสั่งทำงานเสร็จ (อาจใช้เวลา 1–2 นาที)
+
+> ติดตั้งครั้งเดียว — ได้ทุก skill จาก impeccable.style อัตโนมัติ
 
 ---
 

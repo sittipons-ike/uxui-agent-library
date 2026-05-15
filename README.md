@@ -1,4 +1,4 @@
-# UXUI Agent Workflow
+# UXUI library skill
 
 Skills และคู่มือสำหรับทีม Designer ใช้ Claude Code ร่วมกับ Figma
 

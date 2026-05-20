@@ -162,11 +162,11 @@ tracker.py
 ### Monday — Weekly summary + alerts (ถ้ามี)
 
 ```
-📊 Sprint 56 Weekly — 11 พ.ค. 2026 (จันทร์)
+📊 Sprint N Weekly — 11 พ.ค. 2026 (จันทร์)
 
-👤 Big - Sanvasu: 9 pts (8 tasks)
-👤 Beer_woranittha: 8 pts (3 tasks)
-👤 sittiponike: 4 pts (2 tasks)
+👤 Member A: 9 pts (8 tasks)
+👤 Member B: 8 pts (3 tasks)
+👤 Member C: 4 pts (2 tasks)
 
 Total: 21 pts · 13 tasks
 Sprint ends: 21 พ.ค. 2026 (10 working days)
@@ -176,14 +176,14 @@ Sprint ends: 21 พ.ค. 2026 (10 working days)
 ### Wed/Fri — Update message
 
 ```
-📋 Sprint 56 Update — พุธ 13 พ.ค. 2026
+📋 Sprint N Update — พุธ 13 พ.ค. 2026
 
 🔄 Status changes (2)
-• UXI-4499 [Big - Sanvasu]: To Do → In Progress
-• UXI-4486 [Big - Sanvasu]: In Progress → Done
+• PROJ-XXXX [Member A]: ชื่อ task — To Do → In Progress
+• PROJ-XXXX [Member A]: ชื่อ task — In Progress → Done
 
 🚨 Manday Overrun (1)
-• UXI-4493 [Big - Sanvasu] [2pt] In Progress 4 working days (เกินงบ 2 วัน)
+• PROJ-XXXX [Member A] [2pt] ชื่อ task — In Progress 4 working days (เกินงบ 2 วัน)
 
 ⚠️ Sprint ends in 3 working days · 4 tickets ใน To Do (5 pts)
 ```

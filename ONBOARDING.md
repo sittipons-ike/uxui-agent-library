@@ -114,7 +114,7 @@ node -v
 2. copy คำสั่งนี้ทั้งบรรทัด วางใน Terminal แล้วกด Enter:
 
 ```
-npx skills add sittipons-ike/uxui-agent-library
+npx skills add sittipons-ike/uxui-skill-library
 ```
 
 3. ถ้าถามว่าจะติดตั้ง package `skills` หรือไม่ → กด `y` แล้ว Enter
@@ -189,7 +189,7 @@ Rewrite copy ใน Figma นี้: [วาง Figma link]
 รันคำสั่งเดิมจากขั้นตอนที่ 4 ซ้ำได้เลย:
 
 ```
-npx skills add sittipons-ike/uxui-agent-library
+npx skills add sittipons-ike/uxui-skill-library
 ```
 
 ดึง skill ใหม่ลงเครื่องให้อัตโนมัติ

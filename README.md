@@ -7,7 +7,7 @@ Skills และคู่มือสำหรับทีม Designer ใช้
 เปิด Terminal แล้วรัน:
 
 ```
-npx skills add sittipons-ike/uxui-agent-library
+npx skills add sittipons-ike/uxui-skill-library
 ```
 
 > ครั้งแรกอาจถามขอ permission ติดตั้ง package `skills` — กด `y` ได้เลย
@@ -52,5 +52,5 @@ npx skills add pbakaus/impeccable
 รันคำสั่งเดิมซ้ำเพื่อดึงเวอร์ชันล่าสุด:
 
 ```
-npx skills add sittipons-ike/uxui-agent-library
+npx skills add sittipons-ike/uxui-skill-library
 ```

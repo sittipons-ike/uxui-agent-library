@@ -2,6 +2,33 @@
 
 Skills และคู่มือสำหรับทีม Designer ใช้ Claude Code ร่วมกับ Figma
 
+## Workflow — Claude ใช้ Skill ยังไง
+
+```mermaid
+graph TD
+    subgraph Setup["🔧 Setup (ครั้งเดียว)"]
+        S1[Terminal: npx skills add ...] --> S2[Download skills จาก GitHub]
+        S2 --> S3[~/.claude/skills/]
+    end
+
+    subgraph Usage["🎯 Usage (ทุกครั้งที่ใช้งาน)"]
+        U1[User พิมพ์ prompt<br/>ใน Claude Code] --> U2{Claude วิเคราะห์<br/>เจอ trigger ของ skill?}
+        U2 -->|No| U3[Claude ตอบปกติ]
+        U2 -->|Yes| U4[โหลด SKILL.md<br/>จาก ~/.claude/skills/]
+        U4 --> U5{มี Pre-flight check?<br/>เช่น email-summarizer, jira-tracker}
+        U5 -->|Yes| U6[AskUserQuestion:<br/>Setup ครบหรือยัง?]
+        U5 -->|No| U8[Execute skill steps]
+        U6 -->|ครบ| U8
+        U6 -->|ยังไม่ครบ| U7[แสดง setup guide<br/>+ หยุดทำงาน]
+        U8 --> U9[ใช้ MCP tools<br/>Figma / Gmail / Atlassian / etc.]
+        U9 --> U10[Output ส่งกลับ user]
+    end
+
+    S3 -.ใช้ skills ที่ติดตั้งไว้.-> U4
+```
+
+---
+
 ## ติดตั้ง (คำสั่งเดียวจบ)
 
 เปิด Terminal แล้วรัน:

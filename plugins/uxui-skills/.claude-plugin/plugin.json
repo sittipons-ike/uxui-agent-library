@@ -1,0 +1,15 @@
+{
+  "name": "uxui-skills",
+  "version": "1.0.0",
+  "displayName": "UXUI Skills Bundle",
+  "description": "ครบทุก skill ของทีม Designer 7solutions — audit-ui, ux-skill, ui-skill, ux-writing, prd, masterprompt, notion-planning, audit, email-summarizer, jira-tracker",
+  "author": {
+    "name": "7solutions Design Team",
+    "email": "design@7solutions.co.th",
+    "url": "https://github.com/sittipons-ike/uxui-skill-library"
+  },
+  "license": "MIT",
+  "keywords": ["design", "figma", "ux", "ui", "audit", "prd", "thai"],
+  "homepage": "https://github.com/sittipons-ike/uxui-skill-library",
+  "repository": "https://github.com/sittipons-ike/uxui-skill-library"
+}

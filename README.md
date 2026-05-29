@@ -29,17 +29,24 @@ graph TD
 
 ---
 
-## ติดตั้ง (คำสั่งเดียวจบ)
+## ติดตั้ง
 
-เปิด Terminal แล้วรัน:
+### วิธีที่ 1 — Claude Code Plugin (แนะนำ)
+
+ใช้ได้ในทุก environment แม้ network บล็อก npm:
+
+```
+claude plugin marketplace add https://github.com/sittipons-ike/uxui-skill-library
+claude plugin install uxui-skills
+```
+
+### วิธีที่ 2 — npx (ถ้า network เปิด npm)
 
 ```
 npx skills add sittipons-ike/uxui-skill-library
 ```
 
-> ครั้งแรกอาจถามขอ permission ติดตั้ง package `skills` — กด `y` ได้เลย
-
-อยากดูคู่มือฉบับเต็ม (ลง Node.js, ต่อ Figma MCP, ฯลฯ) → อ่าน **[ONBOARDING.md](ONBOARDING.md)**
+> อยากดูคู่มือฉบับเต็ม (ลง Node.js, ต่อ Figma MCP, ฯลฯ) → อ่าน **[ONBOARDING.md](ONBOARDING.md)**
 
 ## Skills ที่มี
 
@@ -76,8 +83,12 @@ npx skills add pbakaus/impeccable
 
 ## อัปเดต Skills
 
-รันคำสั่งเดิมซ้ำเพื่อดึงเวอร์ชันล่าสุด:
+**Plugin:**
+```
+claude plugin marketplace update
+```
 
+**npx:**
 ```
 npx skills add sittipons-ike/uxui-skill-library
 ```

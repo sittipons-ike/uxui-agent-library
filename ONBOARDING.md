@@ -110,17 +110,21 @@ node -v
 
 ## ขั้นตอนที่ 4 — ลง Skills ของทีม
 
-1. เปิด **Terminal** (Spotlight: `Cmd + Space` → พิมพ์ `Terminal` → Enter)
-2. copy คำสั่งนี้ทั้งบรรทัด วางใน Terminal แล้วกด Enter:
+เปิด **Claude Code Desktop** แล้วพิมพ์ทีละบรรทัด (Enter หลังแต่ละคำสั่ง):
 
 ```
-npx skills add sittipons-ike/uxui-skill-library
+claude plugin marketplace add https://github.com/sittipons-ike/uxui-skill-library
 ```
 
-3. ถ้าถามว่าจะติดตั้ง package `skills` หรือไม่ → กด `y` แล้ว Enter
-4. รอจนขึ้น `Done!` — ได้ทุก skill อัตโนมัติ
+```
+claude plugin install uxui-skills
+```
 
-> **อัปเดต Skills ในอนาคต** — รันคำสั่งเดิมซ้ำได้เลย จะดึงเวอร์ชันล่าสุดให้
+รอจนขึ้น Installed — ได้ทุก skill อัตโนมัติ
+
+> **อัปเดต Skills ในอนาคต:** `claude plugin marketplace update`
+
+> **ทางเลือก** ถ้า network เปิด npm — `npx skills add sittipons-ike/uxui-skill-library`
 
 ---
 

@@ -2,11 +2,26 @@
 
 Skills และคู่มือสำหรับทีม Designer ใช้ Claude Code ร่วมกับ Figma
 
-## ติดตั้ง
+## 📦 วิธี Setup (ต้องทำก่อนใช้ skill)
+
+ต้องมี 4 อย่างบนเครื่อง:
+
+1. **Node.js** — ดาวน์โหลด LTS จาก [nodejs.org](https://nodejs.org)
+2. **Git** — Terminal รัน `xcode-select --install`
+3. **Claude Code Desktop** — ดาวน์โหลดจาก [claude.ai/download](https://claude.ai/download)
+4. **Figma MCP** — แก้ไฟล์ `claude_desktop_config.json` ใส่ Figma token
+
+> ดูคู่มือ step-by-step → **[ONBOARDING.md](ONBOARDING.md)**
+
+**วิธีง่ายสุด:** ติดตั้ง Claude Code + plugin (ขั้น 2 ข้างล่าง) แล้วพิมพ์ `/setup-helper` ในChat → จะ auto-detect และ guide ที่เหลือให้
+
+---
+
+## 🚀 วิธีติดตั้ง Skill
 
 ### วิธีที่ 1 — Claude Code Plugin (แนะนำ)
 
-ใช้ได้ในทุก environment แม้ network บล็อก npm:
+ใช้ได้ทุก environment แม้ network บล็อก npm:
 
 ```
 claude plugin marketplace add https://github.com/sittipons-ike/uxui-skill-library
@@ -19,7 +34,14 @@ claude plugin install uxui-skills
 npx skills add sittipons-ike/uxui-skill-library
 ```
 
-> อยากดูคู่มือฉบับเต็ม (ลง Node.js, ต่อ Figma MCP, ฯลฯ) → อ่าน **[ONBOARDING.md](ONBOARDING.md)**
+### หลังติดตั้งเสร็จ
+
+พิมพ์ใน Claude Code:
+```
+/setup-helper
+```
+
+→ จะเช็ก setup ครบไหม + แนะนำ skill แรกให้ลอง
 
 ## Skills ที่มี
 

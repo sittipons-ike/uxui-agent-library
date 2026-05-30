@@ -37,6 +37,18 @@ npx skills add sittipons-ike/uxui-skill-library
 | `prd` | สร้าง Product Requirements Document |
 | `audit` | ตรวจ interface quality ด้าน accessibility, performance, responsive |
 
+**Design System Suite (3-file split architecture)**
+
+| Skill | หน้าที่ |
+|---|---|
+| `design-builder` | สร้าง `design.md` — base tokens (primitive + semantic + mood + iconography) จาก brand vibe |
+| `design-component-builder` | สร้าง `components.md` — atomic library (atom/molecule/organism) อ้าง tokens |
+| `design-icon-builder` | populate iconography layer + ดึง SVG จริงจาก Phosphor/Tabler/Heroicons ฯลฯ |
+| `design-ui-builder` | สร้าง `ui.md` — UI compositions (page/pattern/section/flow) อ้าง components |
+| `design-md-audit` | audit design system ทั้ง split + monolithic + เช็ก cross-file refs |
+| `design-styleguide` | render HTML/Figma style guide จาก design.md+components.md+ui.md |
+| `design-remix` | mix design จาก brand references (Linear typography + Notion spacing ฯลฯ) |
+
 **ต้อง setup ก่อนใช้** ⚠️
 
 | Skill | ต้องการ |

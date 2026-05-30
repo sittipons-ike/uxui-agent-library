@@ -1,149 +1,251 @@
-# Claude Code — UXUI Agent Library
+# 🛡️ UXUI Skill Library — Working Rules
 
-> อ่านไฟล์นี้ก่อนเริ่มทำงานเสมอ
-> Owner: design@7solutions.co.th | Repo: github.com/sittipons-ike/uxui-agent-library
+> **กฎที่ Claude ต้องยึดถือใน repo นี้ — ไม่มีข้อยกเว้น**
+>
+> Repo: github.com/sittipons-ike/uxui-skill-library
+> Owner: design@7solutions.co.th
+>
+> **2 หมวดหลัก:**
+> - 🔒 **Security** (Rules 1–6) — การจัดการ secrets
+> - 🎯 **Engineering Discipline** (Rules 7–11) — วิธีคิดและส่งมอบงาน
 
 ---
 
-## 🎨 Design Skills Registry
+## 📦 Repo Structure (เฉพาะ repo นี้)
 
-Skills เก็บไว้ 2 ที่:
+```
+.claude-plugin/marketplace.json   ← Claude Code marketplace catalog
+plugins/uxui-skills/
+  ├── .claude-plugin/plugin.json  ← Plugin metadata
+  └── skills/  → symlink ไป ../../skills
+skills/                            ← Source of truth (folder-per-skill)
+  ├── <skill-name>/SKILL.md
+  └── ...
+README.md                          ← End-user install guide
+ONBOARDING.md                      ← Full setup walkthrough
+```
 
-1. **`~/.claude/skills/`** — ติดตั้งแล้วในเครื่อง ใช้เป็น primary source
-2. **`skills/`** ใน repo นี้ — source of truth ของทีม อัปเดตผ่าน `git pull && bash setup.sh`
+**เพิ่ม skill ใหม่:**
+1. สร้าง `skills/<skill-name>/SKILL.md` พร้อม YAML frontmatter (name, description)
+2. อัปเดต README skill table
+3. อัปเดต `marketplace.json` + `plugin.json` description
+4. Commit + push → ทีมรัน `claude plugin marketplace update`
 
-### 📘 Team Skills (Thai, Figma-focused)
+---
 
-| Task | Skill Name | File |
+# 🔒 SECURITY RULES
+
+## 🚫 RULE 1 — Secrets ต้องไม่อยู่ที่เหล่านี้
+
+**ห้ามเด็ดขาด** ฝัง / commit / log secret ในสถานที่ต่อไปนี้:
+
+| ที่ห้าม | เหตุผล |
+|---|---|
+| ❌ Source code | จะถูก commit ขึ้น git → หลุดถาวร |
+| ❌ Config files (`settings.json`, `package.json`) | อาจ commit หรือ share โดยไม่ตั้งใจ |
+| ❌ SKILL.md | ขึ้น git แน่นอน — ใช้ `{{PLACEHOLDER}}` หรือ instruct ผู้ใช้ผ่าน `/addkey` |
+| ❌ Markdown / docs / comments | ขึ้น git แน่นอน |
+| ❌ Bash command ที่ echo/cat secret | shell history เก็บไว้ |
+
+**Secrets ที่ครอบคลุม:**
+- API tokens (`ntn_`, `sk-`, `ghp_`, `xox[bp]-`, `AKIA`)
+- Webhook URLs ที่ใช้เป็น auth
+- HMAC signing secrets
+- OAuth client secrets
+- Database URLs ที่มี credentials
+
+---
+
+## ✅ RULE 2 — ที่เก็บ Secrets ที่ปลอดภัย
+
+แนะนำตามลำดับ:
+
+1. **macOS Keychain** ⭐ **ใช้ slash command `/addkey` แทนการรันมือ**
+2. **`.env` file** (gitignored) + dotenv loader
+3. **Environment variable** ใน `~/.zshrc`
+
+### 🔑 Slash commands สำหรับจัดการ keys
+
+| Command | หน้าที่ |
+|---|---|
+| `/addkey <service>` | เพิ่ม API key ลง Keychain (มี security check ก่อน) |
+| `/listkeys` | ดู keys ที่เก็บไว้ (metadata เท่านั้น) |
+| `/removekey <service>` | ลบ key |
+
+**Skill ที่ต้องการ secret** (เช่น `email-summarizer`, `jira-tracker`) ต้อง:
+- ใน SKILL.md → instruct user ให้รัน `/addkey <name>` เอง
+- ห้าม hardcode token / webhook URL ใน SKILL.md
+- ใช้ Pre-flight check (AskUserQuestion) เช็ก setup ก่อนรัน
+
+---
+
+## 🔍 RULE 3 — Auto-scan ก่อนทุก action ที่เสี่ยง
+
+### ก่อน `git add` / `git commit` / `git push`
+- Scan staged content หา pattern:
+  - `Bearer\s+[A-Za-z0-9_\-\.]+`
+  - Token prefix: `ntn_`, `sk-`, `ghp_`, `xox[bpoa]-`, `AKIA`, `eyJ`
+  - Private key markers: `-----BEGIN ... PRIVATE KEY-----`
+- ถ้าเจอ → **หยุด commit ทันที** + แจ้ง user
+
+### ก่อนแสดง config / settings file ใน chat
+- Redact secret เป็น `<REDACTED>` ก่อนแสดง
+
+### ก่อนรัน curl / API call
+- ถ้าเห็น secret hardcode → **ไม่รัน** + เสนอเปลี่ยนเป็น `$ENV_VAR`
+
+---
+
+## 🚨 RULE 4 — ถ้าเจอ secret รั่วในระบบ
+
+```
+1. หยุด action ปัจจุบันทันที
+2. แจ้ง user (ไม่แสดง secret เต็ม)
+3. Scan ทั่ว — git history, ~/.claude/projects/*.jsonl, shell history
+4. Redact ด้วย placeholder เช่น "ntn_REDACTED_PLEASE_ROTATE"
+5. แนะนำ rotation ที่ provider
+6. แนะนำย้าย secret ใหม่ไป Keychain
+```
+
+---
+
+## 🔐 RULE 5 — Tool-specific rules
+
+### Git
+- ❌ `git add -A` / `git add .` ต้องเช็คว่าไม่มีไฟล์ใหม่ที่อาจมี secret
+- ❌ ห้าม `git push --force` to main เด็ดขาด
+- ❌ ห้าม commit ถ้า diff มี secret pattern
+
+### Shell / Bash
+- ❌ ห้าม `echo $TOKEN`, `cat .env` ลง stdout
+- ✅ ใช้ `$VAR` reference แทน inline
+- ✅ ถ้าต้อง debug — mask: `echo "${TOKEN:0:8}***"`
+
+---
+
+## 📋 RULE 6 — Checklist ก่อนปิด session
+
+- [ ] ไม่มี secret ใหม่ใน SKILL.md / docs
+- [ ] ไม่มี untracked file ที่มี secret
+- [ ] `git status` clean
+- [ ] ถ้าเจอ secret รั่ว — rotate แล้ว ไม่ใช่แค่ลบ
+
+---
+
+# 🎯 ENGINEERING DISCIPLINE
+
+## 🎲 RULE 7 — NO MAGIC (ห้ามเดา)
+
+**Assumptions ทุกอย่างต้อง explicit** — ห้าม hallucinate
+
+| ✅ ทำแบบนี้ | ❌ ห้ามทำแบบนี้ |
+|---|---|
+| "ขอ confirm ว่า skill นี้ trigger ตอนไหน" | เดา trigger condition แล้วเขียน SKILL.md |
+| Read SKILL.md จริงก่อนอ้างอิง | อ้างอิงจาก memory |
+| "ไม่เห็น MCP X — เพิ่ม pre-flight check ดีมั้ย" | สมมติว่า MCP ทำงานได้แน่ |
+
+ถ้า context ไม่พอ → state assumption **ก่อน** เขียน
+
+---
+
+## ✔️ RULE 8 — VERIFY BEFORE DONE
+
+**"แก้แล้ว" ≠ "เสร็จ"** — ต้องมี evidence
+
+| สถานะ | คำพูดที่ใช้ได้ | คำพูดที่ห้ามใช้ |
 |---|---|---|
-| Audit/QA Figma (DS compliance) | `audit-ui` | `skills/audit-ui.md` |
-| Plan UX / User flow / IA | `ux-skill` | `skills/ux-skill.md` |
-| Implement UI from Blueprint | `ui-skill` | `skills/ui-skill.md` |
-| Write microcopy | `ux-writing` | `skills/ux-writing.md` |
+| Push แล้วยังไม่ test install | "push แล้ว — กำลัง test npx install" | "เสร็จแล้ว ✅" |
+| Test install ผ่าน | "เสร็จ — install ครบ 18 skills" | "should work" |
+| Verify ไม่ได้ | "push แล้ว แต่ test ไม่ได้เพราะ X" | "ทำเสร็จแล้ว" |
 
-### ✨ Impeccable Skills (third-party — English, code-focused)
+**Evidence:**
+- ✅ Output ของ `npx skills add` / `claude plugin install`
+- ✅ Git status / diff
+- ✅ Verify command ที่ confirm พฤติกรรม
 
-21 skills จาก [impeccable.style](https://impeccable.style) (Apache 2.0) — อยู่ที่ `~/.claude/skills/`
+---
 
-| Category | Skills |
+## 🛑 RULE 9 — DISSENT (ต้องเถียงก่อน change ใหญ่)
+
+ก่อน change ใหญ่ใน repo — ตั้งคำถาม:
+
+```
+1. 💥 BLAST RADIUS — กระทบทีมกี่คน? ต้อง re-install plugin ไหม?
+2. 🔮 ASSUMPTIONS — ทีมใช้ install method ไหน? plugin หรือ npx?
+3. ↩️ REVERSIBILITY — revert ผ่าน git ได้ แต่ทีมต้อง re-install อยู่ดี
+4. 👁️ BLIND SPOTS — มี skill ที่ depend on อันที่จะแก้ไหม?
+```
+
+**เกณฑ์ "change ใหญ่":**
+- ลบ skill / rename skill
+- เปลี่ยน folder structure
+- Breaking change ใน frontmatter
+- Push to main
+
+---
+
+## 📏 RULE 10 — SCOPE DRIFT DETECTION
+
+**Track เป้าหมายเดิม vs ที่ทำจริง**
+
+| Drift signs | ตัวอย่าง |
 |---|---|
-| 🛠️ Foundation | `teach-impeccable`, `frontend-design` |
-| 🔍 Quality & Review | `audit`, `critique`, `polish`, `harden`, `normalize`, `extract` |
-| 🎨 Visual Tuning | `bolder`, `quieter`, `colorize`, `arrange`, `typeset`, `distill` |
-| ✨ Motion & Delight | `animate`, `delight`, `overdrive`, `optimize` |
-| 📱 Adapt & Improve | `adapt`, `onboard`, `clarify` |
+| 🍰 "Just one more" | "เพิ่ม skill X" → "ขอแก้ Y ด้วย" → "Z ก็เห็น..." |
+| 🎯 Nice-to-have → Must | "อยาก polish docs" → rewrite ทั้ง README |
+| 🌊 ขอบเขตขยาย | "Fix typo" → ปรับ structure ทั้ง folder |
+
+**เมื่อเจอ drift:**
+1. หยุดและสรุปสิ่งที่กำลังจะทำเพิ่ม
+2. ถาม: "เดิม agree X — ตอนนี้กลายเป็น X+Y+Z OK มั้ย?"
+3. ถ้าเลยไปแล้ว — แยก commit/PR
 
 ---
 
-## 🔌 Connected MCPs
+## 🚦 RULE 11 — R0 / R1 / R2 (Reversibility)
 
-- **figma-console** (`figma-console-mcp`) — อ่าน/เขียน/ตรวจ Figma โดยตรง
+### 🔴 R0 — Irreversible (ถาม user ก่อนทุกครั้ง)
 
----
-
-## 🎯 Skill Invocation Rules
-
-### Trigger — ใช้ skill ไหนเมื่อไหร่
-
-| User พูดว่า... | Skill ที่ใช้ |
+| R0 actions | เหตุผล |
 |---|---|
-| "audit", "review", "QA" + **Figma link** | `audit-ui` (team skill) |
-| "audit", "review", "QA" + **code/web/built UI** | `/audit` (Impeccable) |
-| "WCAG", "a11y", "contrast", "performance", "dark mode" | `/audit` (Impeccable) |
-| "DS compliance", "token usage", "ใช้ DS ถูกมั้ย" | `audit-ui` (team skill) |
-| "plan", "blueprint", "user flow", "IA" | `ux-skill` |
-| "build UI", "implement", "spec", "tokens" + Figma link | `ui-skill` |
-| "write copy", "rewrite", "microcopy", "CTA" | `ux-writing` |
+| `git push --force` to main | overwrite history |
+| Delete skill folder ที่ทีมใช้อยู่ | ทีมจะใช้ไม่ได้หลัง update |
+| Rename skill (frontmatter name) | ทีม invoke ด้วยชื่อเก่าจะ fail |
+| Transfer repo / change repo name | URL ของ install command พังหมด |
 
-### เลือกระหว่าง audit-ui vs /audit
+### 🟡 R1 — Costly to Reverse (บอกเหตุผลก่อนทำ)
 
-```
-ตรวจ UI?
-  ├─ อยู่ใน Figma (design stage) → audit-ui
-  │    - DS compliance เท่านั้น
-  │    - comment เป็นภาษาไทยบน Figma
-  │    - ใช้ก่อน handoff
-  │
-  └─ อยู่ใน code/browser (built) → /audit (Impeccable)
-       - ครอบคลุม WCAG + perf + responsive
-       - report ภาษาอังกฤษ
-       - ใช้ก่อน ship
-```
+| R1 actions | reversal cost |
+|---|---|
+| `git commit` to main | revert + push อีกรอบ |
+| Edit shared SKILL.md | ทีมต้อง re-install |
+| Restructure folder | update marketplace.json + plugin.json + symlinks |
+| Push to main | force-push ไม่ได้ → ต้อง revert commit |
 
-### วิธีใช้ skills
+### 🟢 R2 — Easily Reversed (ลุยเลย)
 
-1. **อ่าน local file ก่อน** จาก `~/.claude/skills/{skill-name}.md`
-2. **ทำตาม Execution Steps** ที่ระบุใน skill อย่างเคร่งครัด
-3. **ใช้ Output Format** ที่ระบุ — ไม่สร้าง format เอง
-4. **ไม่ละเมิด Constraints** ที่ระบุ
+| R2 actions | |
+|---|---|
+| Edit local file (uncommitted) | `git checkout -- file` |
+| Read SKILL.md / grep | ไม่กระทบ state |
+| Test install ใน /tmp | ลบ folder ทิ้ง |
+| Run agent (read-only) | ไม่กระทบ state |
 
-### Workflow Chaining
-
-Skills ออกแบบให้ทำงานต่อกัน:
-
-```
-ux-strategist → [ui-implementation-specialist + ux-writer] → design-qa-auditor
-```
-
-ถ้า user ขอ "full design workflow" → ทำตามลำดับนี้
+**กฎ:** R0 → ถามทุกครั้ง · R1 → บอกเหตุผล · R2 → ลุยเลย
 
 ---
 
-## 📋 Common Prompts
+# 🎯 ปรัชญาพื้นฐาน
 
-### ตรวจ Figma ก่อน handoff
-```
-Audit นี้: [Figma link]
-ตรวจ DS compliance และ pin comment Critical issues บน Figma
-```
-→ ใช้ `audit-ui`
+> **"ลบจากไฟล์ ≠ ปลอดภัย" — ต้อง rotate ที่ provider เสมอ**
 
-### วาง UX Blueprint
-```
-ช่วยวาง UX Blueprint สำหรับฟีเจอร์ [ชื่อ]
-User goal: [...]
-Business goal: [...]
-```
-→ ใช้ `ux-skill`
+เพราะ secret รั่วไปไหนบ้างเราไม่รู้:
+- Git history, backups, sync services, screen recordings
+- AI/IDE tools ที่ index ไฟล์
 
-### Implement UI
-```
-Implement UI ตาม Blueprint นี้: [link]
-Figma file: [link]
-```
-→ ใช้ `ui-skill`
-
-### Rewrite copy
-```
-Rewrite copy ใน Figma นี้: [link]
-Emotional state: [rushed/anxious/excited]
-```
-→ ใช้ `ux-writing`
+**Rotation = action เดียวที่ปลอดภัย 100%**
 
 ---
 
-## 🛡️ Safety Rules
+## 📅 Last Updated
 
-- **ไม่แก้ไข skill files เอง** โดยไม่มี user confirm
-- **ไม่ลบ Figma comments** ที่มีอยู่เดิม — ใช้ `get_comments` เช็คก่อน `post_comment`
-- **ไม่ auto-approve** design QA ถ้ามี Critical issues
-- ถ้าไม่แน่ใจ **ถาม user ก่อน** ดีกว่าเดาเอง
-
----
-
-## 🔄 อัปเดต Skills
-
-เมื่อทีม lead เพิ่ม skill ใหม่ใน repo:
-
-```bash
-git pull
-bash setup.sh
-```
-
----
-
-## 📝 Team Info
-
-- **Team:** UXUI Team — 7 Solutions
-- **Repo:** github.com/sittipons-ike/uxui-agent-library
-- **Last Updated:** 2026-05-10
+- 2026-05-30 — refactored to mirror global CLAUDE.md (Rules 1–11) + project-specific structure section

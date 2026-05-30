@@ -19,19 +19,21 @@ Skills และคู่มือสำหรับทีม Designer ใช้
 
 ## 🚀 วิธีติดตั้ง Skill
 
-### วิธีที่ 1 — Claude Code Plugin (แนะนำ)
+เลือก **1 วิธี** ก็พอ
 
-ใช้ได้ทุก environment แม้ network บล็อก npm:
+### วิธีที่ 1 — npx (แนะนำ)
+
+```
+npx skills add sittipons-ike/uxui-skill-library
+```
+
+### วิธีที่ 2 — Claude Code Plugin (ใช้เมื่อ npx ไม่ได้)
+
+ถ้า network บล็อก npm registry — ใช้วิธีนี้แทน:
 
 ```
 claude plugin marketplace add https://github.com/sittipons-ike/uxui-skill-library
 claude plugin install uxui-skills
-```
-
-### วิธีที่ 2 — npx (ถ้า network เปิด npm)
-
-```
-npx skills add sittipons-ike/uxui-skill-library
 ```
 
 ### หลังติดตั้งเสร็จ
@@ -91,12 +93,14 @@ npx skills add pbakaus/impeccable
 
 ## อัปเดต Skills
 
-**Plugin:**
-```
-claude plugin marketplace update
-```
+รันคำสั่งเดิมจากวิธีที่ติดตั้งซ้ำ:
 
-**npx:**
+**ถ้าใช้ npx:**
 ```
 npx skills add sittipons-ike/uxui-skill-library
+```
+
+**ถ้าใช้ Plugin:**
+```
+claude plugin marketplace update
 ```
